@@ -10,7 +10,7 @@ ASFLAGS = -f elf
 LD = gnu-ld
 LDFLAGS = -T $(SOURCE)/link.ld -melf_i386
 
-OBJECTS=loader.o kmain.o display/framebuffer.o
+OBJECTS=loader.o kmain.o display/framebuffer.o util/io.o display/monitor.o
 
 all: kernel.elf
 
@@ -39,4 +39,5 @@ run: iso
 	qemu-system-i386 -cdrom $(OUTPUT)/os.iso -m 512 -monitor stdio
 
 clean:
-	rm -rf $(OUTPUT)/*.o $(OUTPUT)/kernel.elf $(OUTPUT)/os.iso
+	find $(OUTPUT) -name '*.o' -delete
+	rm -rf $(OUTPUT)/kernel.elf $(OUTPUT)/os.iso
