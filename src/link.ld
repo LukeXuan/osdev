@@ -2,7 +2,7 @@ ENTRY(loader)
 
 SECTIONS {
   . = 0x00100000;
-  
+
   .text ALIGN (4K) :
   {
     *(.text)
