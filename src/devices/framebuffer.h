@@ -4,9 +4,9 @@
 #define ROW_MAX 25
 #define COL_MAX 80
 
-/* struct for framebuffer text format */
+/* struct for framebuffer char format */
 
-struct fb_text {
+struct fb_char {
     char c;
     unsigned char fg : 4;
     unsigned char bg : 4;
@@ -39,21 +39,22 @@ struct fb_text {
  *  @param text the char wrapped with fb_text
  */
 
-void fb_write(unsigned char row, unsigned char col, struct fb_text *text);
+void fb_write(unsigned char row, unsigned char col, struct fb_char *data);
 
 /** fb_print:
  * Print a string on the framebuffer at the given location
  *
- *  @param row the row number of the start location
- *  @param col the column number of the start location
- *  @param text the string to be printed
- *  @param fg the foreground color of the string
- *  @param bg the background color of the string
- *  @param size the length of the string
+ *  @param row		the row number of the start location
+ *  @param col		the column number of the start location
+ *  @param str		the string to be printed
+ *  @param fg 		the foreground color of the string
+ *  @param bg 		the background color of the string
+ *  @return 		the length of the printed string
  */
 
-void fb_print(unsigned char row, unsigned char col,
-              char *text, unsigned char fg, unsigned char bg, unsigned int size);
+unsigned int fb_print(unsigned char row, unsigned char col,
+                      const char * const str,
+                      unsigned char fg, unsigned char bg);
 
 /** fb_clean:
  *  Clean all char in the framebuffer and reset the colors.

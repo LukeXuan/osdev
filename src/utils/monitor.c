@@ -1,5 +1,5 @@
 #include "monitor.h"
-#include "framebuffer.h"
+#include "../devices/framebuffer.h"
 
 unsigned short monitor_row;
 
@@ -9,8 +9,9 @@ unsigned short monitor_fg = FB_WHITE;
 
 unsigned short monitor_bg = FB_BLACK;
 
-void monitor_print(char * text, unsigned int len) {
-    fb_print(monitor_row, monitor_col, text, monitor_fg, monitor_bg, len);
+void monitor_print(const char * const str) {
+    unsigned int len = fb_print(monitor_row, monitor_col,
+                                str, monitor_fg, monitor_bg);
 
     monitor_col += (len % COL_MAX);
     monitor_row += (len / COL_MAX);
@@ -30,6 +31,9 @@ void monitor_set_color(unsigned short fg, unsigned short bg) {
 
 void monitor_clean() {
     fb_clean(monitor_fg, monitor_bg);
+
+    monitor_row = monitor_col = 0;
+    fb_move_cursor(monitor_row * COL_MAX + monitor_col);
 }
 
 void monitor_move_cursor(unsigned short pos) {

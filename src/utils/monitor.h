@@ -14,7 +14,7 @@
  *  @param len the length of the string
  */
 
-void monitor_print(char * text, unsigned int len);
+void monitor_print(const char * const text);
 
 /** monitor_set_color:
  *  Set the color of the monitor.

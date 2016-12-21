@@ -3,7 +3,7 @@ SOURCE=src
 VPATH=src:$(SOURCE)
 
 CC = clang
-CFLAGS = -m32 --target=i686-pc-none-elf -march=i386 -fno-stack-protector -fno-builtin -nostdlib -nostdinc -Wall -Wextra -Werror
+CFLAGS = -m32 --target=i686-pc-none-elf -march=i686 -fno-stack-protector -fno-builtin -nostdlib -nostdinc -Wall -Wextra -Werror -g
 
 AS = nasm
 ASFLAGS = -f elf
@@ -11,11 +11,14 @@ ASFLAGS = -f elf
 LD = gnu-ld
 LDFLAGS = -melf_i386
 
-OBJECTS=loader.o kmain.o display/framebuffer.o util/io.o display/monitor.o
+OBJECTS=loader.o kmain.o \
+		devices/framebuffer.o devices/serial.o \
+		utils/io.o utils/monitor.o utils/log.o \
+		memory/gdt_s.o memory/gdt.o
 
 all: kernel.elf
 
-kernel.elf: link.ld $(OBJECTS)
+kernel: link.ld $(OBJECTS)
 	@$(LD) -T $< $(LDFLAGS) $(addprefix $(OUTPUT)/, $(OBJECTS)) -o $(OUTPUT)/kernel.elf
 
 %.o: %.c
@@ -26,9 +29,10 @@ kernel.elf: link.ld $(OBJECTS)
 	@mkdir -p $(dir $(OUTPUT)/$@)
 	@$(AS) $(ASFLAGS) $< -o $(OUTPUT)/$@
 
-iso: kernel.elf
+iso: kernel
 	@cp $(OUTPUT)/kernel.elf iso/boot/kernel.elf
 	@mkisofs -R \
+			 -quiet \
 	 		 -b boot/grub/stage2_eltorito \
 			 -no-emul-boot \
 			 -boot-load-size 4 \
@@ -38,8 +42,8 @@ iso: kernel.elf
 	@rm iso/boot/kernel.elf
 
 run: iso
-	qemu-system-i386 -cdrom $(OUTPUT)/os.iso -m 512 -monitor stdio
+	@qemu-system-i386 -cdrom $(OUTPUT)/os.iso -m 512 -serial stdio -serial vc -monitor vc
 
 clean:
 	@find $(OUTPUT) -name '*.o' -delete
-	@rm -rf $(OUTPUT)/kernel.elf $(OUTPUT)/os.iso
+	@rm -rf $(OUTPUT)/kernel.* $(OUTPUT)/os.iso

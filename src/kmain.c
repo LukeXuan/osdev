@@ -1,6 +1,15 @@
-#include "display/monitor.h"
+#include "utils/monitor.h"
+#include "devices/serial.h"
+#include "utils/log.h"
+#include "memory/gdt.h"
 
 void hello() {
+    log_setup(LOG_BACKEND_COM1);
     monitor_clean();
-    monitor_print("Hello Shiraihii!", 16);
+
+    gdt_set_size(8193);
+
+    monitor_print("Hello World!");
+
+    return;
 }
