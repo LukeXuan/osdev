@@ -4,8 +4,8 @@
 #include "segment.h"
 
 struct gdt_descriptor {
-    unsigned int address;
     unsigned short limit;
+    unsigned int address;
 } __attribute__((packed));
 
 struct gdt_descriptor gdtd;
@@ -16,7 +16,7 @@ struct gdt_descriptor gdtd;
  *  @param size		the size of the table
  */
 
-int gdt_set_size(unsigned short size);
+int gdt_set_size(unsigned int address, unsigned short size);
 
 /** gdt_set_descriptor:
  *  Sets the given descriptor.

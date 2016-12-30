@@ -5,7 +5,7 @@ global loader
   CHECKSUM            equ -MAGIC_NUMBER
   KERNEL_STACK_SIZE   equ 4096
 
-extern hello
+extern kmain
 
 section .bss
 align 4
@@ -21,7 +21,7 @@ align 4
 loader:
   mov esp, kernel_stack + KERNEL_STACK_SIZE
 
-  call hello
+  call kmain
   mov edx, 0xCAFEBABE
 .loop:
   jmp .loop

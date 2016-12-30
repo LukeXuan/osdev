@@ -14,7 +14,7 @@ LDFLAGS = -melf_i386
 OBJECTS=loader.o kmain.o \
 		devices/framebuffer.o devices/serial.o \
 		utils/io.o utils/monitor.o utils/log.o \
-		memory/gdt_s.o memory/gdt.o
+		memory/gdt_s.o memory/gdt.o memory/segment_s.o
 
 all: kernel.elf
 
